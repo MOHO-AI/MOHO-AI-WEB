@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOHO AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://unpkg.com/lucide-icons@0.378.0/dist/lucide.min.js"></script>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body class="bg-slate-100 dark:bg-gray-900 font-[Tajawal] overflow-hidden">
+
+    <div id="app-container" class="flex h-screen text-gray-800 dark:text-gray-200">
+        <div id="sidebar" class="flex-col w-72 bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg border-l border-gray-200 dark:border-gray-700 transition-transform duration-300 ease-in-out -translate-x-full md:translate-x-0 md:flex fixed md:relative h-full z-30">
+            <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+                <div class="flex items-center gap-3">
+                    <img src="https://placehold.co/40x40/0b3d91/ffffff?text=M&font=raleway" alt="MOHO AI Logo" class="rounded-lg">
+                    <h1 class="text-xl font-bold text-sky-900 dark:text-sky-300">MOHO AI</h1>
+                </div>
+                <button id="new-chat-btn" class="p-2 rounded-lg hover:bg-sky-100 dark:hover:bg-gray-700" title="محادثة جديدة">
+                    <i data-lucide="file-plus-2"></i>
+                </button>
+            </div>
+            <div class="flex-1 p-2 overflow-y-auto" id="history-container">
+                <p class="text-center text-sm text-gray-400">قم بتسجيل الدخول لعرض المحادثات.</p>
+            </div>
+            <div id="user-profile" class="p-4 border-t border-gray-200 dark:border-gray-700">
+                 </div>
+        </div>
+
+        <div class="flex flex-col flex-1">
+            <div class="flex items-center justify-between p-3 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
+                <button id="menu-toggle" class="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <i data-lucide="menu"></i>
+                </button>
+                <div class="flex items-center gap-2">
+                    <label for="model-selector" class="text-sm font-medium sr-only">اختر النموذج:</label>
+                    <select id="model-selector" class="bg-transparent text-base font-bold text-gray-700 dark:text-gray-200 border-0 focus:ring-0">
+                        <option value="MOHO-K">MOHO-K</option>
+                        <option value="MOHO-K3-Pro">MOHO-K3 Pro</option>
+                    </select>
+                    <p id="pro-limit-msg" class="text-xs text-red-500 mt-1 hidden">متبقي <span id="pro-limit-count">5</span> رسائل.</p>
+                </div>
+                 <button id="dark-mode-toggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <i data-lucide="moon" class="hidden dark:inline"></i>
+                    <i data-lucide="sun" class="inline dark:hidden"></i>
+                </button>
+            </div>
+
+            <div id="chat-container" class="flex-1 p-4 sm:p-6 overflow-y-auto">
+                <div id="welcome-screen" class="flex flex-col items-center justify-center h-full text-center">
+                    <img src="https://placehold.co/100x100/0b3d91/ffffff?text=M&font=raleway" alt="MOHO AI Logo" class="rounded-2xl mb-4 shadow-lg">
+                    <h2 class="text-3xl font-extrabold text-gray-700 dark:text-gray-200">كيف يمكنني مساعدتك اليوم؟</h2>
+                </div>
+            </div>
+
+            <div class="p-4 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border-t border-gray-200 dark:border-gray-700">
+                <form id="chat-form" class="flex items-center space-x-3 space-x-reverse">
+                    <textarea id="message-input" rows="1" class="flex-1 p-3 bg-gray-100 dark:bg-gray-700 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all duration-200" placeholder="اكتب رسالتك هنا..."></textarea>
+                    <button type="submit" id="send-btn" class="p-3 bg-sky-600 text-white rounded-full hover:bg-sky-700 disabled:bg-sky-300 dark:disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors duration-200">
+                        <i data-lucide="send-horizontal"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div id="auth-modal-backdrop" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden items-center justify-center">
+        <div id="login-form-container" class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl w-full max-w-md relative transition-all duration-300 scale-95 opacity-0">
+            <button class="auth-close-btn"><i data-lucide="x"></i></button>
+            <h2 class="text-2xl font-bold text-center mb-6">تسجيل الدخول</h2>
+            <form id="login-form">
+                <input type="email" id="login-email" placeholder="البريد الإلكتروني" required>
+                <input type="password" id="login-password" placeholder="كلمة المرور" required>
+                <button type="submit" class="auth-btn">دخول</button>
+                <p class="text-center mt-4 text-sm">ليس لديك حساب؟ <a href="#" id="show-signup" class="text-sky-500 hover:underline">إنشاء حساب</a></p>
+            </form>
+        </div>
+
+        <div id="signup-form-container" class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl w-full max-w-md relative transition-all duration-300 scale-95 opacity-0 hidden">
+            <button class="auth-close-btn"><i data-lucide="x"></i></button>
+            <h2 class="text-2xl font-bold text-center mb-6">إنشاء حساب جديد</h2>
+            <form id="signup-form">
+                <input type="text" id="signup-name" placeholder="الاسم الكامل" required>
+                <input type="email" id="signup-email" placeholder="البريد الإلكتروني" required>
+                <input type="password" id="signup-password" placeholder="كلمة المرور" required>
+                <button type="submit" class="auth-btn">إنشاء</button>
+                <p class="text-center mt-4 text-sm">لديك حساب بالفعل؟ <a href="#" id="show-login" class="text-sky-500 hover:underline">تسجيل الدخول</a></p>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast" class="fixed bottom-5 right-5 bg-gray-900 text-white py-2 px-4 rounded-lg shadow-lg transition-all duration-300 translate-y-20 opacity-0"></div>
+
+    <script src="./main.js"></script>
+</body>
+</html>
