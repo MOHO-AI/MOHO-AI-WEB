@@ -1,0 +1,46 @@
+/* CUSTOM CSS FOR HIGH-RESOLUTION DESIGN */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    /* Auth form input styling */
+    input[type='email'], input[type='password'], input[type='text'] {
+        @apply w-full p-3 mb-4 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 transition-all;
+    }
+}
+
+@layer components {
+    .auth-btn {
+        @apply w-full p-3 bg-sky-600 text-white font-bold rounded-lg hover:bg-sky-700 transition-colors duration-200;
+    }
+    .auth-close-btn {
+        @apply absolute top-4 right-4 text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors;
+    }
+}
+
+/* Styling for chat bubbles */
+.chat-bubble-user {
+    @apply bg-sky-600 text-white p-3 rounded-xl rounded-br-none max-w-lg lg:max-w-xl xl:max-w-2xl shadow;
+}
+
+.chat-bubble-ai {
+    @apply bg-white dark:bg-gray-700 p-3 rounded-xl rounded-bl-none max-w-lg lg:max-w-xl xl:max-w-2xl shadow;
+}
+
+/* Styling for code blocks inside AI responses */
+.prose pre {
+    @apply bg-gray-800 dark:bg-black/50 text-white p-4 rounded-lg relative font-mono text-sm;
+}
+
+.copy-btn {
+    @apply absolute top-2 left-2 bg-gray-600 hover:bg-gray-500 text-gray-300 p-1.5 rounded-md cursor-pointer transition-colors;
+}
+
+/* Sidebar conversation history item */
+.history-item {
+    @apply flex items-center justify-between w-full text-right p-2 rounded-lg cursor-pointer hover:bg-sky-100 dark:hover:bg-gray-700 transition-colors duration-150;
+}
+.history-item.active {
+    @apply bg-sky-200 dark:bg-sky-900/50;
+}
